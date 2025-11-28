@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio de Impresión 3D - Proyectos & Tienda</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de Tailwind para usar la fuente Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+        /* Estilos personalizados para el carrusel y botones */
+        .carousel-item {
+            display: none;
+        }
+        .carousel-item.active {
+            display: block;
+        }
+        .btn-primary {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .whatsapp-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+    <!-- Iconos de Lucide (usados en el carrito) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header y Navegación -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-extrabold text-indigo-600">
+                PrintCraft 3D
+            </h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#solicitud" class="text-lg font-medium hover:text-indigo-600 transition duration-300">Solicitud</a>
+                <a href="#proyectos" class="text-lg font-medium hover:text-indigo-600 transition duration-300">Proyectos</a>
+                <a href="#tienda" class="text-lg font-medium hover:text-indigo-600 transition duration-300">Tienda</a>
+            </nav>
+            <!-- Botón del Carrito de Compras -->
+            <button id="cart-button" class="relative p-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition duration-300 shadow-md">
+                <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                <span id="cart-count" class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Sección 1: Formulario de Solicitud de Trabajo (WhatsApp) -->
+        <section id="solicitud" class="mb-16 p-8 bg-white shadow-xl rounded-2xl">
+            <h2 class="text-4xl font-bold text-center mb-6 text-indigo-700">Diseña tu Idea</h2>
+            <p class="text-center mb-8 text-lg text-gray-600">Describe tu proyecto y medidas. Recibirás una cotización personalizada directamente por WhatsApp.</p>
+            
+            <form id="solicitud-form" class="max-w-xl mx-auto space-y-6">
+                
+                <div>
+                    <label for="idea_principal" class="block text-sm font-medium text-gray-700 mb-2">Idea Principal / Descripción del Proyecto:</label>
+                    <textarea id="idea_principal" name="idea_principal" rows="4" required
+                        placeholder="Quiero una pieza de repuesto para mi cafetera con forma de engranaje o una figura de mi personaje favorito."
+                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label for="medidas" class="block text-sm font-medium text-gray-700 mb-2">Medidas Aproximadas (Largo x Ancho x Alto, en mm o cm):</label>
+                    <input type="text" id="medidas" name="medidas" required
+                        placeholder="Ej: 10cm x 5cm x 2cm, o Diámetro de 50mm"
+                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border">
+                </div>
+
+                <div>
+                    <label for="nombre_contacto" class="block text-sm font-medium text-gray-700 mb-2">Tu Nombre:</label>
+                    <input type="text" id="nombre_contacto" name="nombre_contacto" required
+                        placeholder="Ingresa tu nombre para el contacto"
+                        class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-3 border">
+                </div>
+
+                <button type="submit"
+                    class="whatsapp-btn w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 shadow-lg">
+                    <i data-lucide="send" class="w-5 h-5 mr-2"></i>
+                    Enviar Solicitud por WhatsApp
+                </button>
+            </form>
+            <p id="whatsapp-message" class="mt-4 text-sm text-center text-green-700 hidden">¡Serás redirigido a WhatsApp!</p>
+        </section>
+
+        <!-- Sección 2: Ruleta/Carrusel de Trabajos Realizados -->
+        <section id="proyectos" class="mb-16">
+            <h2 class="text-4xl font-bold text-center mb-8 text-indigo-700">Nuestros Proyectos Recientes</h2>
+            
+            <div class="relative max-w-4xl mx-auto bg-gray-100 rounded-2xl shadow-xl overflow-hidden">
+                <!-- Contenedor del Carrusel -->
+                <div id="carousel" class="w-full h-[400px] sm:h-[500px] overflow-hidden">
+                    <!-- Las imágenes se insertarán aquí por JS -->
+                </div>
+
+                <!-- Botones de navegación -->
+                <button id="prev-btn" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg opacity-80 hover:opacity-100 transition duration-300">
+                    <i data-lucide="chevron-left" class="w-6 h-6 text-indigo-600"></i>
+                </button>
+                <button id="next-btn" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-3 rounded-full shadow-lg opacity-80 hover:opacity-100 transition duration-300">
+                    <i data-lucide="chevron-right" class="w-6 h-6 text-indigo-600"></i>
+                </button>
+
+                <!-- Indicadores de punto -->
+                <div id="indicators" class="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+                    <!-- Los indicadores se insertarán aquí por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 3: Galería de Productos en Venta Directa -->
+        <section id="tienda" class="mb-16 p-8 bg-white shadow-xl rounded-2xl">
+            <h2 class="text-4xl font-bold text-center mb-8 text-indigo-700">Productos en Venta Directa</h2>
+            <div id="product-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Los productos se insertarán aquí por JS -->
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Modal del Carrito de Compras (Oculto por defecto) -->
+    <div id="cart-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-[100] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+            
+            <!-- Botón de Cerrar -->
+            <button id="close-cart-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            
+            <h3 class="text-2xl font-bold mb-6 text-indigo-700 border-b pb-2">Tu Carrito de Compras</h3>
+
+            <!-- Contenido del Carrito -->
+            <div id="cart-items-container" class="space-y-4 max-h-80 overflow-y-auto pr-2">
+                <!-- Items del carrito se insertarán aquí -->
+                <p id="empty-cart-message" class="text-center text-gray-500">El carrito está vacío.</p>
+            </div>
+
+            <!-- Resumen y Total -->
+            <div class="mt-6 pt-4 border-t border-gray-200">
+                <div class="flex justify-between items-center text-xl font-bold text-gray-800">
+                    <span>Total:</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+
+                <!-- Simulación de Pantalla de Pago -->
+                <button id="checkout-button" class="mt-6 w-full py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 btn-primary" disabled>
+                    Proceder al Pago
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Pago Final (Simulado) -->
+    <div id="payment-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-[110] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 relative">
+             <!-- Botón de Cerrar -->
+            <button id="close-payment-modal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold mb-4 text-green-600 border-b pb-2">Simulación de Pago</h3>
+
+            <p class="mb-4 text-gray-600">Esta es una simulación del paso final. En una aplicación real, aquí se integraría una pasarela de pagos (como Stripe, PayPal, o un servicio local).</p>
+            
+            <div id="payment-summary" class="p-4 bg-green-50 rounded-lg border border-green-200 mb-6">
+                <h4 class="font-semibold text-lg text-green-700 mb-2">Resumen de la Orden:</h4>
+                <ul id="summary-list" class="space-y-1 text-sm text-gray-700">
+                    <!-- Resumen de items aquí -->
+                </ul>
+                <div class="mt-3 pt-2 border-t border-green-300 flex justify-between font-bold text-lg text-green-800">
+                    <span>Total a Pagar:</span>
+                    <span id="summary-total">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Botones de Acción (Simulados) -->
+            <div class="space-y-3">
+                <button class="w-full py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition duration-300">
+                    Pagar con Tarjeta (Simulado)
+                </button>
+                <button class="w-full py-3 bg-indigo-500 text-white font-semibold rounded-lg hover:bg-indigo-600 transition duration-300">
+                    Pagar con Transferencia (Instrucciones Simuladas)
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <footer class="bg-gray-800 text-white mt-10 p-6 text-center">
+        <div class="max-w-7xl mx-auto">
+            <p>&copy; 2025 PrintCraft 3D. Todos los derechos reservados. | Contacto: +56 9 5976 4470 (Solo WhatsApp)</p>
+        </div>
+    </footer>
+
+    <script>
+        // Inicialización de Iconos de Lucide
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // 1. WhatsApp Formulario de Solicitud
+        // ----------------------------------------------------
+        const form = document.getElementById('solicitud-form');
+        // El número de WhatsApp ha sido actualizado aquí:
+        const whatsappNumber = "+56959764470"; 
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre_contacto').value.trim();
+            const idea = document.getElementById('idea_principal').value.trim();
+            const medidas = document.getElementById('medidas').value.trim();
+
+            if (!nombre || !idea || !medidas) {
+                // Validación básica para evitar envío vacío
+                document.getElementById('whatsapp-message').textContent = 'Por favor, rellena todos los campos del formulario.';
+                document.getElementById('whatsapp-message').classList.remove('hidden', 'text-green-700');
+                document.getElementById('whatsapp-message').classList.add('text-red-600');
+                return;
+            }
+
+            // Mensaje a enviar
+            const message = `*SOLICITUD DE IMPRESIÓN 3D*\n` +
+                            `Hola, soy ${nombre} y me gustaría cotizar un proyecto.\n\n` +
+                            `*Idea Principal/Descripción:*\n${idea}\n\n` +
+                            `*Medidas Aproximadas:*\n${medidas}\n\n` +
+                            `¡Espero tu respuesta!`;
+
+            // Codificar el mensaje para la URL
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+            // Muestra mensaje de éxito y redirige
+            document.getElementById('whatsapp-message').textContent = '¡Serás redirigido a WhatsApp con tu solicitud lista!';
+            document.getElementById('whatsapp-message').classList.remove('hidden', 'text-red-600');
+            document.getElementById('whatsapp-message').classList.add('text-green-700');
+
+            // Redirigir después de un pequeño retraso
+            setTimeout(() => {
+                window.open(whatsappUrl, '_blank');
+            }, 500);
+        });
+
+        // ----------------------------------------------------
+        // 2. Carrusel de Trabajos Realizados
+        // ----------------------------------------------------
+        const carouselData = [
+            { src: "https://placehold.co/800x500/0044AA/ffffff?text=Proyecto+1%0A(Pieza+Mecánica)", alt: "Pieza Mecánica de Alta Precisión", title: "Pieza Mecánica" },
+            { src: "https://placehold.co/800x500/AA0044/ffffff?text=Proyecto+2%0A(Figura+Personalizada)", alt: "Figura coleccionable personalizada", title: "Figura Personalizada" },
+            { src: "https://placehold.co/800x500/00AA44/ffffff?text=Proyecto+3%0A(Prototipo+de+Carcasa)", alt: "Prototipo de carcasa electrónica", title: "Prototipo de Carcasa" }
+        ];
+
+        let currentSlide = 0;
+        const carousel = document.getElementById('carousel');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const indicatorsContainer = document.getElementById('indicators');
+
+        function renderCarousel() {
+            carousel.innerHTML = '';
+            indicatorsContainer.innerHTML = '';
+
+            carouselData.forEach((item, index) => {
+                // Renderizar item de carrusel
+                const div = document.createElement('div');
+                div.className = `carousel-item absolute inset-0 transition-opacity duration-500 ease-in-out ${index === currentSlide ? 'active' : ''}`;
+                div.innerHTML = `
+                    <img src="${item.src}" alt="${item.alt}" class="w-full h-full object-cover rounded-2xl" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/800x500/333/fff?text=Error+de+Carga';">
+                    <div class="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white w-full rounded-b-2xl">
+                        <p class="text-xl font-bold">${item.title}</p>
+                    </div>
+                `;
+                carousel.appendChild(div);
+                
+                // Renderizar indicador
+                const indicator = document.createElement('button');
+                indicator.className = `w-3 h-3 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-gray-400'} transition duration-300`;
+                indicator.addEventListener('click', () => goToSlide(index));
+                indicatorsContainer.appendChild(indicator);
+            });
+        }
+
+        function showSlide(index) {
+            const items = document.querySelectorAll('.carousel-item');
+            const indicators = document.querySelectorAll('#indicators button');
+            
+            items.forEach((item, i) => {
+                item.classList.remove('active');
+                if (i === index) {
+                    item.classList.add('active');
+                }
+            });
+
+            indicators.forEach((indicator, i) => {
+                indicator.className = `w-3 h-3 rounded-full ${i === index ? 'bg-white' : 'bg-gray-400'} transition duration-300`;
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            let next = (currentSlide + 1) % carouselData.length;
+            showSlide(next);
+        }
+
+        function prevSlide() {
+            let prev = (currentSlide - 1 + carouselData.length) % carouselData.length;
+            showSlide(prev);
+        }
+        
+        function goToSlide(index) {
+            showSlide(index);
+        }
+
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+
+        // Auto-play (opcional)
+        let autoPlayInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+
+        // Detener auto-play al interactuar
+        carousel.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+        carousel.addEventListener('mouseleave', () => autoPlayInterval = setInterval(nextSlide, 5000));
+
+        renderCarousel();
+
+        // ----------------------------------------------------
+        // 3. Galería de Productos en Venta Directa (Tienda)
+        // ----------------------------------------------------
+        const products = [
+            { id: 1, name: "Soporte para Audífonos", price: 15.99, description: "Diseño ergonómico, color negro mate.", image: "https://placehold.co/600x400/333/fff?text=Soporte%0AAudífonos" },
+            { id: 2, name: "Llavero Personalizado", price: 5.50, description: "Material PLA, elige tu inicial.", image: "https://placehold.co/600x400/6A5ACD/fff?text=Llavero%0APLA" },
+            { id: 3, name: "Maceta Geométrica", price: 22.00, description: "Ideal para suculentas, material PETG.", image: "https://placehold.co/600x400/F08080/fff?text=Maceta%0AGeométrica" },
+            { id: 4, name: "Organizador de Cables", price: 12.00, description: "Set de 5 piezas para escritorio.", image: "https://placehold.co/600x400/4682B4/fff?text=Organizador%0ACables" },
+            { id: 5, name: "Mini Nave Espacial", price: 25.00, description: "Modelo a escala para coleccionistas.", image: "https://placehold.co/600x400/800080/fff?text=Nave%0AEspacial" },
+            { id: 6, name: "Vaso Reutilizable", price: 18.50, description: "Con tapa, ideal para bebidas frías.", image: "https://placehold.co/600x400/FFD700/000?text=Vaso%0AReutilizable" }
+        ];
+
+        const productGallery = document.getElementById('product-gallery');
+
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = "bg-gray-50 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden";
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                <div class="p-5">
+                    <h3 class="text-xl font-semibold text-indigo-800 mb-2">${product.name}</h3>
+                    <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-2xl font-bold text-gray-900">$${product.price.toFixed(2)}</span>
+                        <button data-product-id="${product.id}"
+                                class="add-to-cart-btn px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 btn-primary">
+                            <i data-lucide="plus-circle" class="w-4 h-4 inline-block mr-1"></i> Añadir
+                        </button>
+                    </div>
+                </div>
+            `;
+            productGallery.appendChild(card);
+        });
+
+        // Vuelve a inicializar iconos para los nuevos botones
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // 4. Carrito de Compras
+        // ----------------------------------------------------
+        let cart = [];
+
+        const cartCountSpan = document.getElementById('cart-count');
+        const cartModal = document.getElementById('cart-modal');
+        const paymentModal = document.getElementById('payment-modal');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartTotalSpan = document.getElementById('cart-total');
+        const checkoutButton = document.getElementById('checkout-button');
+        const emptyCartMessage = document.getElementById('empty-cart-message');
+        
+        // Abrir/Cerrar Carrito
+        document.getElementById('cart-button').addEventListener('click', () => {
+            cartModal.style.display = 'flex';
+        });
+
+        document.getElementById('close-cart-modal').addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        document.getElementById('close-payment-modal').addEventListener('click', () => {
+            paymentModal.style.display = 'none';
+        });
+
+
+        // Función para actualizar la UI del carrito
+        function updateCartUI() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.classList.remove('hidden');
+                checkoutButton.disabled = true;
+                checkoutButton.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                emptyCartMessage.classList.add('hidden');
+                checkoutButton.disabled = false;
+                checkoutButton.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    const itemElement = document.createElement('div');
+                    itemElement.className = "flex justify-between items-center p-3 bg-gray-50 rounded-lg";
+                    itemElement.innerHTML = `
+                        <div class="flex flex-col">
+                            <span class="font-medium text-gray-900">${item.name}</span>
+                            <span class="text-sm text-gray-500">$${item.price.toFixed(2)} x ${item.quantity}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="font-bold">$${itemTotal.toFixed(2)}</span>
+                            <button data-id="${item.id}" class="remove-item-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100 transition">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+            }
+
+            cartTotalSpan.textContent = `$${total.toFixed(2)}`;
+            cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            // Vuelve a inicializar iconos para los nuevos botones
+            lucide.createIcons();
+        }
+
+        // Función para añadir al carrito
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+        }
+
+        // Función para eliminar item del carrito
+        function removeItemFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        // Listener para los botones "Añadir al Carrito"
+        productGallery.addEventListener('click', (e) => {
+            if (e.target.closest('.add-to-cart-btn')) {
+                const button = e.target.closest('.add-to-cart-btn');
+                const productId = parseInt(button.dataset.productId);
+                addToCart(productId);
+            }
+        });
+        
+        // Listener para los botones "Eliminar" del carrito
+        cartItemsContainer.addEventListener('click', (e) => {
+            if (e.target.closest('.remove-item-btn')) {
+                const button = e.target.closest('.remove-item-btn');
+                const productId = parseInt(button.dataset.id);
+                removeItemFromCart(productId);
+            }
+        });
+
+
+        // ----------------------------------------------------
+        // 5. Simulación de Pantalla de Pago
+        // ----------------------------------------------------
+        checkoutButton.addEventListener('click', () => {
+            cartModal.style.display = 'none'; // Cerrar el carrito
+            paymentModal.style.display = 'flex'; // Abrir el modal de pago
+
+            const summaryList = document.getElementById('summary-list');
+            const summaryTotalSpan = document.getElementById('summary-total');
+            let finalTotal = 0;
+
+            summaryList.innerHTML = '';
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                finalTotal += itemTotal;
+
+                const listItem = document.createElement('li');
+                listItem.className = "flex justify-between";
+                listItem.textContent = `${item.name} x ${item.quantity}`;
+                const totalSpan = document.createElement('span');
+                totalSpan.textContent = `$${itemTotal.toFixed(2)}`;
+                listItem.appendChild(totalSpan);
+                summaryList.appendChild(listItem);
+            });
+
+            summaryTotalSpan.textContent = `$${finalTotal.toFixed(2)}`;
+        });
+        
+        // Inicializar el carrito en la carga
+        updateCartUI();
+
+    </script>
+
+</body>
+</html>
+
